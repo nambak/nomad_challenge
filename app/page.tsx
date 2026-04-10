@@ -1,13 +1,17 @@
 'use client'
 
 import { useActionState } from 'react'
-import { login } from './actions'
+import { login, type LoginState } from './actions'
 import { SubmitButton } from './components/SubmitButton'
 
-const initialState = { success: false, message: '' }
+const initialState: LoginState = { success: false }
 
 export default function Home() {
   const [state, formAction] = useActionState(login, initialState)
+
+  const emailError = state.errors?.email?.[0]
+  const usernameError = state.errors?.username?.[0]
+  const passwordError = state.errors?.password?.[0]
 
   return (
     <div className="flex flex-1 items-center justify-center bg-white font-sans">
@@ -34,35 +38,57 @@ export default function Home() {
         {/* Form */}
         <form action={formAction} className="flex w-full flex-col gap-4">
           {/* Email */}
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="20" height="16" x="2" y="4" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-            </span>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="w-full rounded-full border border-stone-200 bg-stone-100/60 py-3 pl-11 pr-4 text-sm text-stone-800 outline-none placeholder:text-stone-400 focus:border-stone-300 focus:bg-white"
-            />
+          <div>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+              </span>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                className={`w-full rounded-full py-3 pl-11 pr-4 text-sm text-stone-800 outline-none placeholder:text-stone-400 ${
+                  emailError
+                    ? 'border-2 border-rose-400 bg-white'
+                    : 'border border-stone-200 bg-stone-100/60 focus:border-stone-300 focus:bg-white'
+                }`}
+              />
+            </div>
+            {emailError && (
+              <p className="mt-1.5 pl-4 text-xs font-medium text-rose-400">
+                {emailError}
+              </p>
+            )}
           </div>
 
           {/* Username */}
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="5" />
-                <path d="M20 21a8 8 0 1 0-16 0" />
-              </svg>
-            </span>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              className="w-full rounded-full border border-stone-200 bg-stone-100/60 py-3 pl-11 pr-4 text-sm text-stone-800 outline-none placeholder:text-stone-400 focus:border-stone-300 focus:bg-white"
-            />
+          <div>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="M20 21a8 8 0 1 0-16 0" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                className={`w-full rounded-full py-3 pl-11 pr-4 text-sm text-stone-800 outline-none placeholder:text-stone-400 ${
+                  usernameError
+                    ? 'border-2 border-rose-400 bg-white'
+                    : 'border border-stone-200 bg-stone-100/60 focus:border-stone-300 focus:bg-white'
+                }`}
+              />
+            </div>
+            {usernameError && (
+              <p className="mt-1.5 pl-4 text-xs font-medium text-rose-400">
+                {usernameError}
+              </p>
+            )}
           </div>
 
           {/* Password */}
@@ -76,18 +102,17 @@ export default function Home() {
               <input
                 type="password"
                 name="password"
-                required
                 placeholder="Password"
                 className={`w-full rounded-full py-3 pl-11 pr-4 text-sm text-stone-800 outline-none placeholder:text-stone-400 ${
-                  state.message && !state.success
+                  passwordError
                     ? 'border-2 border-rose-400 bg-white'
                     : 'border border-stone-200 bg-stone-100/60 focus:border-stone-300 focus:bg-white'
                 }`}
               />
             </div>
-            {state.message && !state.success && (
+            {passwordError && (
               <p className="mt-1.5 pl-4 text-xs font-medium text-rose-400">
-                {state.message}
+                {passwordError}
               </p>
             )}
           </div>
