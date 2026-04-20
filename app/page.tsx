@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { getSession } from '@/lib/session'
+import { AddTweet } from './components/AddTweet'
 import { logOut } from './profile/actions'
 
 const PAGE_SIZE = 5
@@ -66,6 +67,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </header>
 
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
+        <div className="mb-8">
+          <AddTweet />
+        </div>
+
         {tweets.length === 0 ? (
           <p className="py-16 text-center text-sm text-stone-400">
             No tweets yet.
